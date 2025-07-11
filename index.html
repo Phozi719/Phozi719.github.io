@@ -3,32 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Rock Paper Scissors</title>
+  <title>Phozi's Portfolio</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Rock Paper Scissors ✊✋✌️</h1>
-  
-    <div id="playerSection">
-      <label for="playerName">Enter your name:</label>
-      <input type="text" id="playerName" placeholder="e.g. Phoz">
-      <button onclick="startGame()">Start Game</button>
-    </div>
-  
-    <div id="gameSection" style="display:none;">
-      <h2 id="greeting"></h2>
-      <div id="buttons">
-        <button data-choice="0">✊</button>
-        <button data-choice="1">✋</button>
-        <button data-choice="2">✌️</button>
-      </div>
-      <div id="result"></div>
-      <div id="scoreBoard"></div>
-      <button onclick="endGame()">End Game</button>
-      <button onclick="resetGame()">Play Again</button>
-    </div>
 
-    <script src="script.js"></script>
-  </body>
-  
-</html>
+  <!-- 🎀 Profile Header -->
+  <header class="header">
+    <img src="profile.jpg" alt="Phozi's Picture" class="profile-pic">
+    <h1>Likanyisa Phozisa Mke</h1>
+    <p>Frontend Dev 💻 | Data Enthusiast 📊 | Aspiring AI Creator 🤖</p>
+    <div class="social-links">
+      <a href="https://www.linkedin.com/in/phozisa-mke-aa5653349" target="_blank">🔗 LinkedIn</a>
+      <a href="CV of Likhanyise Phozisa mke.pdf" download>📄 Download CV</a>
+    </div>
+  </header>
+
+  <!-- 💁🏽‍♀️ About Me -->
+  <section id="about">
+    <h2>About Me</h2>
+    <p>
+      Hey there! I'm a Computer Science student completing WIL (Work Integrated Learning) and available full-time for internships. 
+      I’m passionate about frontend development, data analytics, and building fun projects while learning fast. My goal is to break into tech and eventually build AI agents that help people.
+    </p>
+  </section>
+
+  <!-- 🚀 Projects -->
+  <section id="projects">
+    <h2>Projects</h2>
+
+    <div class="project">
+      <h3>🎮 Rock Paper Scissors Game</h3>
+      <p>A fun interactive browser game built with HTML, CSS and JavaScript.</p>
+
+      <!-- Game Lives Here -->
+      <div class="game-container">
+        <h4>Rock Paper Scissors ✊✋✌️</h4>
+
+        <div id="playerSection">
+          <label for="playerName">Enter your name:</label>
+          <input type="text" id="playerNa
