@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Play Rock Paper Scissors</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <h1>🎮 Rock Paper Scissors</h1>
+    <p>Play against the bot — best of luck!</p>
+  </header>
+
+  <section>
+    <div class="project-card">
+      <label for="playerName">Enter your name:</label>
+      <input type="text" id="playerName" />
+
+      <div id="buttons">
+        <button onclick="play('rock')">✊</button>
+        <button onclick="play('paper')">✋</button>
+        <button onclick="play('scissors')">✌️</button>
+      </div>
+
+      <div id="result"></div>
+    </div>
+  </section>
+
+  <script>
+    function play(userChoice) {
+      const choices = ["rock", "paper", "scissors"];
+      const botChoice = choices[Math.floor(Math.random() * choices.length)];
+      const result = document.getElementById("result");
+      let outcome;
+
+      if (userChoice === botChoice) {
+        outcome = "It's a draw!";
+      } else if (
+        (userChoice === "rock" && botChoice === "scissors") ||
+        (userChoice === "paper" && botChoice === "rock") ||
+        (userChoice === "scissors" && botChoice === "paper")
+      ) {
+        outcome = "You win!";
+      } else {
+        outcome = "You lose!";
+      }
+
+      result.innerHTML = `<p><strong>Your Choice:</strong> ${userChoice}<br>
+                          <strong>Bot's Choice:</strong> ${botChoice}<br>
+                          <strong>Result:</strong> ${outcome}</p>`;
+    }
+  </script>
+</body>
+</html>

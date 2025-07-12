@@ -1,9 +1,11 @@
 body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin-top: 30px;
-    background-color: #f0f8ff;
-  }
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  margin-top: 30px;
+  background-color: #fefefe;
+  padding: 20px;
+  color: #333;
+}
   
   button {
     font-size: 2rem;
@@ -28,12 +30,6 @@ body {
     border-radius: 6px;
     border: 1px solid #ccc;
   }
-  body {
-  font-family: 'Segoe UI', sans-serif;
-  padding: 20px;
-  background-color: #fefefe;
-  color: #333;
-}
 
 .header {
   text-align: center;
@@ -109,4 +105,17 @@ section {
 .card-link:hover .project-card {
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
   transform: translateY(-4px);
+}
+#rockGame {
+  margin-top: 4rem;
+  display: flex;
+  justify-content: center;
+}
+
+#rockGame .project-card {
+  width: 100%;
+  max-width: 600px;
+}
+#rockGame .project-card {
+  background-color: #f3f3f3;
 }
