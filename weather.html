@@ -1,0 +1,796 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+<div class="booking-container">
+  <button id="open-booking-btn" class="booking-btn">Book Sports Field in eMalahleni</button>
+  
+  <div id="booking-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2><i class="fas fa-map-marker-alt"></i> Book Sports Field in eMalahleni</h2>
+      
+      <div class="form-group">
+        <label for="booking-date"><i class="far fa-calendar-alt"></i> Select Date:</label>
+        <input type="date" id="booking-date" min="">
+      </div>
+      
+      <div class="form-group">
+        <label for="booking-time"><i class="far fa-clock"></i> Select Time:</label>
+        <select id="booking-time">
+          <option value="08:00-10:00">8:00 AM - 10:00 AM</option>
+          <option value="10:00-12:00">10:00 AM - 12:00 PM</option>
+          <option value="12:00-14:00">12:00 PM - 2:00 PM</option>
+          <option value="14:00-16:00">2:00 PM - 4:00 PM</option>
+          <option value="16:00-18:00">4:00 PM - 6:00 PM</option>
+          <option value="18:00-20:00">6:00 PM - 8:00 PM</option>
+        </select>
+      </div>
+      
+      <button id="check-weather-btn" class="booking-btn">
+        <i class="fas fa-cloud-sun"></i> Check eMalahleni Weather & Confirm
+      </button>
+    </div>
+  </div>
+  
+  <div id="weather-confirmation" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2><i class="fas fa-umbrella"></i> eMalahleni Weather Forecast</h2>
+      
+      <div class="weather-display">
+        <div class="frame" id="weather-frame">
+          <!-- Weather visualization will be inserted here -->
+        </div>
+        
+        <div class="forecast-panel">
+          <div class="location-info">
+            <i class="fas fa-map-marker-alt"></i> eMalahleni, Mpumalanga
+            <div id="current-date" class="current-date"></div>
+          </div>
+          
+          <table class="preview">
+            <tbody>
+              <tr>
+                <td id="day1-name">Today</td>
+                <td id="day1-temp">--° | --°</td>
+              </tr>
+              <tr>
+                <td id="day2-name">Tomorrow</td>
+                <td id="day2-temp">--° | --°</td>
+              </tr>
+              <tr>
+                <td id="day3-name">Day 3</td>
+                <td id="day3-temp">--° | --°</td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="weather-advice" id="weather-advice">
+            Loading eMalahleni weather data...
+          </div>
+        </div>
+      </div>
+      
+      <div class="booking-details">
+        <p><strong><i class="far fa-calendar-alt"></i> Booking Date:</strong> <span id="confirm-date"></span></p>
+        <p><strong><i class="far fa-clock"></i> Time Slot:</strong> <span id="confirm-time"></span></p>
+      </div>
+      
+      <div class="action-buttons">
+        <button id="confirm-booking-btn" class="confirm-btn">
+          <i class="fas fa-check-circle"></i> Confirm Booking
+        </button>
+        <button id="cancel-booking-btn" class="cancel-btn">
+          <i class="fas fa-times-circle"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+/* Base styles */
+@import url('https://fonts.googleapis.com/css?family=Overlock');
+body {
+  background: #643a7a;
+  font-family: 'Overlock', sans-serif;
+}
+
+/* Weather frame styles */
+.frame {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  border-radius: 8px 8px 0 0;
+  color: #4b384c;
+  font-family: 'overlock', Helvetica, sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+  margin: 0 auto;
+  transition: all 0.5s ease;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+/* Weather type backgrounds */
+.sunny {
+  background: linear-gradient(to bottom, #56CCF2, #F2C94C);
+}
+
+.cloudy {
+  background: linear-gradient(to bottom, #B0C4DE, #778899);
+}
+
+.rainy {
+  background: linear-gradient(to bottom, #4B79CF, #283E51);
+}
+
+.thunderstorm {
+  background: linear-gradient(to bottom, #0F2027, #203A43);
+}
+
+.clear-night {
+  background: linear-gradient(to bottom, #000428, #004e92);
+}
+
+.partly-cloudy {
+  background: linear-gradient(to bottom, #56CCF2, #B0C4DE);
+}
+
+/* Weather elements */
+.weather-icon {
+  position: absolute;
+  font-size: 5rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.temperature-display {
+  position: absolute;
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  top: 130px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.weather-details {
+  position: absolute;
+  color: white;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+  bottom: 20px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+/* Forecast panel styles */
+.forecast-panel {
+  background: white;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.location-info {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 15px;
+  font-weight: bold;
+}
+
+.location-info i {
+  color: #695b93;
+}
+
+.current-date {
+  font-size: 0.9rem;
+  color: #777;
+  font-weight: normal;
+  margin-top: 5px;
+}
+
+.preview {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.preview td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  color: #555;
+}
+
+.preview tr:last-child td {
+  border-bottom: none;
+}
+
+.weather-advice {
+  font-style: italic;
+  color: #695b93;
+  padding: 15px;
+  text-align: center;
+  font-size: 1.1rem;
+  background: #f8f9fa;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Modal styles */
+.booking-container {
+  font-family: 'Overlock', sans-serif;
+  text-align: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.booking-btn {
+  background-color: #695b93;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 18px;
+  transition: all 0.3s;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.booking-btn:hover {
+  background-color: #503760;
+  transform: translateY(-3px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+}
+
+.booking-btn i {
+  margin-right: 8px;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.7);
+  overflow-y: auto;
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.modal-content h2 {
+  color: #695b93;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 15px;
+  right: 25px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s;
+}
+
+.close:hover {
+  color: #333;
+}
+
+.form-group {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  box-sizing: border-box;
+  font-size: 16px;
+  transition: border 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+  border-color: #695b93;
+  outline: none;
+}
+
+.weather-display {
+  margin: 20px 0;
+}
+
+.booking-details {
+  margin: 25px 0;
+  text-align: left;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border-left: 5px solid #695b93;
+}
+
+.booking-details p {
+  margin: 10px 0;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.booking-details strong {
+  color: #333;
+}
+
+.booking-details i {
+  color: #695b93;
+  margin-right: 8px;
+  width: 20px;
+  text-align: center;
+}
+
+.action-buttons {
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.confirm-btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.confirm-btn:hover {
+  background-color: #45a049;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.cancel-btn {
+  background-color: #f44336;
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cancel-btn:hover {
+  background-color: #d32f2f;
+  transform: translateY(-3px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-content {
+    width: 95%;
+    margin: 10% auto;
+    padding: 20px;
+  }
+  
+  .frame {
+    height: 250px;
+  }
+  
+  .weather-icon {
+    font-size: 4rem;
+    top: 40px;
+  }
+  
+  .temperature-display {
+    font-size: 3rem;
+    top: 110px;
+  }
+  
+  .booking-details p {
+    font-size: 1rem;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .confirm-btn, .cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Loading animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Set min date to today
+  const today = new Date();
+  const dd = String(today.getDate()).padStart(2, '0');
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const yyyy = today.getFullYear();
+  document.getElementById('booking-date').min = `${yyyy}-${mm}-${dd}`;
+  
+  // Modal elements
+  const bookingBtn = document.getElementById('open-booking-btn');
+  const bookingModal = document.getElementById('booking-modal');
+  const weatherModal = document.getElementById('weather-confirmation');
+  const closeButtons = document.querySelectorAll('.close');
+  const checkWeatherBtn = document.getElementById('check-weather-btn');
+  const confirmBookingBtn = document.getElementById('confirm-booking-btn');
+  const cancelBookingBtn = document.getElementById('cancel-booking-btn');
+  const weatherFrame = document.getElementById('weather-frame');
+  
+  // Open booking modal
+  bookingBtn.addEventListener('click', function() {
+    bookingModal.style.display = 'block';
+  });
+  
+  // Close modals
+  closeButtons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      bookingModal.style.display = 'none';
+      weatherModal.style.display = 'none';
+    });
+  });
+  
+  // Close when clicking outside
+  window.addEventListener('click', function(event) {
+    if (event.target === bookingModal) {
+      bookingModal.style.display = 'none';
+    }
+    if (event.target === weatherModal) {
+      weatherModal.style.display = 'none';
+    }
+  });
+  
+  // Check weather and show confirmation
+  checkWeatherBtn.addEventListener('click', async function() {
+    const dateInput = document.getElementById('booking-date');
+    const timeInput = document.getElementById('booking-time');
+    
+    if (!dateInput.value) {
+      alert('Please select a date');
+      return;
+    }
+    
+    // Display booking details
+    document.getElementById('confirm-date').textContent = formatDate(dateInput.value);
+    document.getElementById('confirm-time').textContent = formatTime(timeInput.value);
+    
+    // Show loading state
+    const originalBtnText = checkWeatherBtn.innerHTML;
+    checkWeatherBtn.innerHTML = `<span class="loading"></span> Loading eMalahleni weather...`;
+    checkWeatherBtn.disabled = true;
+    
+    try {
+      // Get weather data for eMalahleni
+      const weatherData = await getEmalahleniWeatherData(dateInput.value);
+      
+      // Update weather display
+      updateWeatherDisplay(weatherData, dateInput.value);
+      
+      // Show weather modal
+      bookingModal.style.display = 'none';
+      weatherModal.style.display = 'block';
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      document.getElementById('weather-advice').textContent = 
+        "Could not load eMalahleni weather data. Please try again later.";
+    } finally {
+      checkWeatherBtn.innerHTML = originalBtnText;
+      checkWeatherBtn.disabled = false;
+    }
+  });
+  
+  // Confirm booking
+  confirmBookingBtn.addEventListener('click', function() {
+    const date = document.getElementById('confirm-date').textContent;
+    const time = document.getElementById('confirm-time').textContent;
+    
+    alert(`Booking confirmed for ${date} at ${time} in eMalahleni`);
+    weatherModal.style.display = 'none';
+  });
+  
+  // Cancel booking
+  cancelBookingBtn.addEventListener('click', function() {
+    weatherModal.style.display = 'none';
+    bookingModal.style.display = 'block';
+  });
+  
+  // Helper functions
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  }
+  
+  function formatTime(timeValue) {
+    const [start, end] = timeValue.split('-');
+    return `${formatHour(start)} to ${formatHour(end)}`;
+  }
+  
+  function formatHour(timeStr) {
+    const [hours, minutes] = timeStr.split(':');
+    const hour = parseInt(hours);
+    const period = hour >= 12 ? 'PM' : 'AM';
+    const displayHour = hour > 12 ? hour - 12 : hour;
+    return `${displayHour}:${minutes} ${period}`;
+  }
+  
+  function getDayName(date) {
+    return date.toLocaleDateString('en-US', { weekday: 'short' });
+  }
+  
+  function updateWeatherDisplay(weatherData, selectedDate) {
+    // Set current date display
+    const currentDate = new Date();
+    document.getElementById('current-date').textContent = currentDate.toLocaleDateString('en-US', { 
+      weekday: 'long', 
+      month: 'long', 
+      day: 'numeric' 
+    });
+    
+    // Update weather frame
+    weatherFrame.innerHTML = `
+      <div class="weather-icon">${getWeatherIcon(weatherData.weatherType)}</div>
+      <div class="temperature-display">${weatherData.temp}°C</div>
+      <div class="weather-details">
+        ${weatherData.windDirection} ${weatherData.windSpeed} km/h | Humidity: ${weatherData.humidity}%
+      </div>
+    `;
+    
+    // Set weather-appropriate background
+    setWeatherBackground(weatherFrame, weatherData.weatherType);
+    
+    // Update forecast
+    const nextDay = new Date(selectedDate);
+    nextDay.setDate(nextDay.getDate() + 1);
+    const dayAfter = new Date(nextDay);
+    dayAfter.setDate(dayAfter.getDate() + 1);
+    
+    document.getElementById('day1-name').textContent = 'Today';
+    document.getElementById('day1-temp').textContent = `${weatherData.currentTemp}° | ${weatherData.currentLow}°`;
+    document.getElementById('day2-name').textContent = getDayName(nextDay);
+    document.getElementById('day2-temp').textContent = `${weatherData.nextDayTemp}° | ${weatherData.nextDayLow}°`;
+    document.getElementById('day3-name').textContent = getDayName(dayAfter);
+    document.getElementById('day3-temp').textContent = `${weatherData.dayAfterTemp}° | ${weatherData.dayAfterLow}°`;
+    
+    // Update advice
+    document.getElementById('weather-advice').textContent = weatherData.advice;
+  }
+  
+  function setWeatherBackground(element, weatherType) {
+    // Remove all weather classes
+    element.className = 'frame';
+    
+    // Add the appropriate class
+    element.classList.add(weatherType);
+  }
+  
+  function getWeatherIcon(weatherType) {
+    const icons = {
+      'sunny': 'fa-sun',
+      'cloudy': 'fa-cloud',
+      'rainy': 'fa-cloud-rain',
+      'thunderstorm': 'fa-bolt',
+      'clear-night': 'fa-moon',
+      'partly-cloudy': 'fa-cloud-sun'
+    };
+    return `<i class="fas ${icons[weatherType] || 'fa-cloud'}"></i>`;
+  }
+  
+  async function getEmalahleniWeatherData(dateString) {
+    // Note: In a real application, you would call an actual weather API here
+    // For demonstration, we're simulating API calls with eMalahleni-specific data
+    
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const date = new Date(dateString);
+    const month = date.getMonth();
+    const day = date.getDate();
+    const hour = date.getHours();
+    
+    // eMalahleni climate information:
+    // - Summer (Dec-Feb): Warm to hot, afternoon thunderstorms
+    // - Autumn (Mar-May): Mild, less rain
+    // - Winter (Jun-Aug): Cool to cold, dry
+    // - Spring (Sep-Nov): Warm, increasing thunderstorms
+    
+    const isSummer = month >= 11 || month <= 1; // Dec-Feb
+    const isAutumn = month >= 2 && month <= 4; // Mar-May
+    const isWinter = month >= 5 && month <= 7; // Jun-Aug
+    const isSpring = month >= 8 && month <= 10; // Sep-Nov
+    const isNight = hour < 6 || hour > 18;
+    
+    const dayMod = day % 10;
+    
+    // Base values for eMalahleni
+    let temp = 20;
+    let currentTemp = 22;
+    let currentLow = 10;
+    let windSpeed = 10;
+    let humidity = 50;
+    let windDirection = 'N';
+    let advice = "Good weather for outdoor activities in eMalahleni!";
+    let nextDayTemp = 21;
+    let nextDayLow = 11;
+    let dayAfterTemp = 22;
+    let dayAfterLow = 12;
+    let weatherType = 'sunny';
+    
+    // Adjust based on eMalahleni's seasons
+    if (isSummer) {
+      // eMalahleni summer: warm with afternoon thunderstorms
+      temp = 28 + dayMod;
+      currentTemp = 30;
+      currentLow = 18;
+      nextDayTemp = 29;
+      nextDayLow = 17;
+      dayAfterTemp = 31;
+      dayAfterLow = 19;
+      humidity = 50 + dayMod * 2;
+      windSpeed = 10 + dayMod;
+      windDirection = ['NE', 'E', 'SE'][dayMod % 3];
+      
+      // 40% chance of afternoon thunderstorm in summer
+      if (hour >= 12 && hour <= 18 && Math.random() < 0.4) {
+        weatherType = 'thunderstorm';
+        advice = "Afternoon thunderstorm expected in eMalahleni! Consider morning booking.";
+      } else {
+        weatherType = isNight ? 'clear-night' : 'sunny';
+        advice = "Hot summer day in eMalahleni - stay hydrated!";
+      }
+    } else if (isAutumn) {
+      // eMalahleni autumn: mild and dry
+      temp = 22 + dayMod;
+      currentTemp = 24;
+      currentLow = 12;
+      nextDayTemp = 23;
+      nextDayLow = 11;
+      dayAfterTemp = 22;
+      dayAfterLow = 10;
+      humidity = 40 + dayMod;
+      windSpeed = 8 + dayMod;
+      windDirection = ['NW', 'N', 'NE'][dayMod % 3];
+      weatherType = isNight ? 'clear-night' : 'partly-cloudy';
+      advice = "Pleasant autumn weather in eMalahleni - perfect for sports!";
+    } else if (isWinter) {
+      // eMalahleni winter: cool and dry
+      temp = 15 + dayMod;
+      currentTemp = 17;
+      currentLow = 5;
+      nextDayTemp = 16;
+      nextDayLow = 4;
+      dayAfterTemp = 18;
+      dayAfterLow = 6;
+      humidity = 30 + dayMod;
+      windSpeed = 12 + dayMod;
+      windDirection = ['SW', 'W', 'NW'][dayMod % 3];
+      weatherType = isNight ? 'clear-night' : 'sunny';
+      advice = "Cool winter day in eMalahleni - dress in layers!";
+    } else if (isSpring) {
+      // eMalahleni spring: warming with increasing thunderstorms
+      temp = 20 + dayMod;
+      currentTemp = 22;
+      currentLow = 12;
+      nextDayTemp = 23;
+      nextDayLow = 13;
+      dayAfterTemp = 21;
+      dayAfterLow = 12;
+      humidity = 50 + dayMod;
+      windSpeed = 10 + dayMod;
+      windDirection = ['SE', 'S', 'SW'][dayMod % 3];
+      
+      // 30% chance of rain in spring
+      if (Math.random() < 0.3) {
+        weatherType = 'rainy';
+        advice = "Spring showers possible in eMalahleni - bring rain gear!";
+      } else {
+        weatherType = isNight ? 'clear-night' : 'partly-cloudy';
+        advice = "Beautiful spring weather in eMalahleni!";
+      }
+    }
+    
+    // Add some randomness
+    temp += Math.floor(Math.random() * 4) - 2;
+    currentTemp += Math.floor(Math.random() * 3) - 1;
+    currentLow += Math.floor(Math.random() * 3) - 1;
+    nextDayTemp += Math.floor(Math.random() * 3) - 1;
+    nextDayLow += Math.floor(Math.random() * 3) - 1;
+    dayAfterTemp += Math.floor(Math.random() * 3) - 1;
+    dayAfterLow += Math.floor(Math.random() * 3) - 1;
+    windSpeed += Math.floor(Math.random() * 5) - 2;
+    humidity += Math.floor(Math.random() * 10) - 5;
+    
+    // Ensure reasonable values for eMalahleni
+    temp = Math.max(5, Math.min(35, temp));
+    currentTemp = Math.max(5, Math.min(35, currentTemp));
+    currentLow = Math.max(0, Math.min(20, currentLow));
+    nextDayTemp = Math.max(5, Math.min(35, nextDayTemp));
+    nextDayLow = Math.max(0, Math.min(20, nextDayLow));
+    dayAfterTemp = Math.max(5, Math.min(35, dayAfterTemp));
+    dayAfterLow = Math.max(0, Math.min(20, dayAfterLow));
+    windSpeed = Math.max(0, Math.min(25, windSpeed));
+    humidity = Math.max(20, Math.min(80, humidity));
+    
+    return {
+      temp,
+      currentTemp,
+      currentLow,
+      windSpeed,
+      humidity,
+      windDirection,
+      advice,
+      nextDayTemp,
+      nextDayLow,
+      dayAfterTemp,
+      dayAfterLow,
+      weatherType
+    };
+  }
+});
+</script>
