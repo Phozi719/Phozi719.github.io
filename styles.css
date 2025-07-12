@@ -101,3 +101,12 @@ section {
   margin-bottom: 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
 }
+.card-link {
+  text-decoration: none;
+  color: inherit;
+  display: inline-block;
+}
+.card-link:hover .project-card {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+  transform: translateY(-4px);
+}
