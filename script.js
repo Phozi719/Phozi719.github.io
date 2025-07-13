@@ -52,12 +52,15 @@ function resetGame() {
   document.getElementById("result").innerText = "";
 }
 
-document.querySelectorAll("#buttons button").forEach(btn => {
-  btn.addEventListener("click", () => {
-    const player = +btn.dataset.choice;
-    const comp = getComputerChoice();
-    document.getElementById("result").innerText =
-      `${playerName} picked ${choices[player]} | Computer picked ${choices[comp]}\n${decide(player, comp)}`;
-    updateScore();
+window.onload = () => {
+  document.querySelectorAll("#buttons button").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const player = +btn.dataset.choice;
+      const comp = getComputerChoice();
+      document.getElementById("result").innerText =
+        `${playerName}'s Choice: ${choices[player]} | Computer's Choice: ${choices[comp]}\n${decide(player, comp)}`;
+      updateScore();
+    });
   });
-});
+};
+
