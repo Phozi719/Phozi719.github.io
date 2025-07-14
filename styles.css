@@ -192,3 +192,54 @@ body {
   font-family: 'Poppins', sans-serif;
   line-height: 1.6;
 }
+/* 💖 Profile Header Styling */
+.header {
+  background: linear-gradient(to right, #ffe3f0, #e0f7fa);
+  padding: 50px 20px;
+  text-align: center;
+  border-radius: 0 0 30px 30px;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.header h1 {
+  font-size: 30px;
+  color: #333;
+  margin-top: 10px;
+}
+
+.header p {
+  font-size: 16px;
+  color: #555;
+  margin: 10px 0;
+}
+
+.social-links a {
+  margin: 0 10px;
+  text-decoration: none;
+  color: #d63384;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+  color: #6c5ce7;
+}
+
+/* 🌸 Profile Picture Styling */
+.profile-pic {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  animation: floaty 3s ease-in-out infinite;
+}
+
+/* ✨ Subtle animation */
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
