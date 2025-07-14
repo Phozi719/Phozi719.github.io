@@ -128,3 +128,50 @@ section {
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+/* Font family */
+body {
+  font-family: 'Poppins', 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* About Me layout */
+.about-container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 30px;
+  padding: 40px;
+  max-width: 1000px;
+  margin: auto;
+}
+
+.about-text {
+  flex: 2;
+  text-align: left;
+  line-height: 1.6;
+  font-size: 1.1rem;
+  text-indent: 2rem;
+}
+
+.about-text h2 {
+  font-size: 2rem;
+  color: #ff69b4; /* hot pink */
+}
+
+.about-image {
+  flex: 1;
+}
+
+.cartoon-pic {
+  width: 180px;
+  height: auto;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Cute floating animation (optional) */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
