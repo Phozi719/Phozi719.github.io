@@ -233,13 +233,8 @@ body {
   border-radius: 50%;
   object-fit: cover;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  animation: floaty 3s ease-in-out infinite;
+ 
 }
 
-/* ✨ Subtle animation */
-@keyframes floaty {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
-  100% { transform: translateY(0); }
-}
+
 
