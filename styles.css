@@ -272,6 +272,52 @@ body {
 .email-button:hover {
   background-color: #b0246a;
 }
+.project-card {
+  text-align: center;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #fff8fb;
+  border-radius: 20px;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#buttons button {
+  font-size: 2rem;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 50%;
+  border: 2px solid #ff90bc;
+  background-color: #ffe0ef;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+#buttons button:hover {
+  background-color: #ffb3d9;
+  transform: scale(1.1);
+}
+
+.score {
+  font-weight: bold;
+  margin-top: 10px;
+  color: #6c757d;
+}
+
+button[onclick="resetGame()"] {
+  margin-top: 1rem;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  background-color: #ff90bc;
+  color: white;
+  border-radius: 30px;
+  cursor: pointer;
+}
+
+button[onclick="resetGame()"]:hover {
+  background-color: #ff6495;
+}
 
 
 
